@@ -33,22 +33,27 @@ $wpdb->prefix
 
 
 
-Group Table: wp_sdb_groups
-id              -- PK
-name, location  -- required fields
-key_slug        -- used for referencing
-created_at      -- timestamp
 
-Fields Table: wp_sdb_fields
+$sql = "
+    CREATE TABLE $table_groups (
+        id MEDIUMINT(9) NOT NULL AUTO_INCREMENT,
+        name VARCHAR(255) NOT NULL,
+        location LONGTEXT NOT NULL,
+        key_slug VARCHAR(255) NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (id)
+    ) $charset_collate;
 
-id              -- PK
-group_id        -- FK (linked to sdb_groups)
-label, name     -- field info
-type            -- 'text', 'image', etc.
-options         -- (for dropdowns/repeaters in JSON)
-sort_order      -- for ordering fields
-created_at      -- timestamp
-
+    CREATE TABLE $table_fields (
+        id MEDIUMINT(9) NOT NULL AUTO_INCREMENT,
+        group_id MEDIUMINT(9) NOT NULL,
+        config LONGTEXT NOT NULL,
+        sort_order INT DEFAULT 0,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (id),
+        INDEX group_id_index (group_id)
+    ) $charset_collate;
+";
 
 
 
